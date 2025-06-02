@@ -1,47 +1,69 @@
 package management;
 
+import datastructures.maps.CustomHashMap;
 import library.Book;
 import library.Member;
 
-public class BookManager {
-    // TODO: Define a data structure that stores ISBNs and their matching Book objects
+import java.util.NoSuchElementException;
 
+public class BookManager {
+
+    private CustomHashMap<String, Book> booksById;
     private MemberManager memberManager;
 
     public BookManager(MemberManager memberManager) {
-        // TODO: Initialize your data structure here
+        booksById = new CustomHashMap<>();
         this.memberManager = memberManager;
     }
 
     public void addBook(Book book) {
-        // TODO: Add the book and its ISBN to your data structure
+        if (book == null)
+            throw new IllegalArgumentException();
+        booksById.put(book.getIsbn(), book);
     }
 
     public Book getBookByIsbn(String isbn) {
-        // TODO
-        return null;
+        return booksById.get(isbn);
     }
 
     public boolean isBookAvailable(String isbn) {
-        // TODO
-        return false;
+
+        return booksById.get(isbn).isAvailable();
     }
 
     public void setBookAvailability(String isbn, boolean available) {
-        // TODO
+        if (booksById.get(isbn) == null) {
+            System.out.println("Book with isbn: " + isbn + " not found!");
+            return;
+        }
+
+        booksById.get(isbn).setAvailable(available);
     }
 
     public void addToWaitlist(String isbn, String memberId) {
-        // TODO
+        if (memberManager.getMember(memberId) == null) {
+            System.out.println("Member with memberID: " + memberId + " not found!");
+            return;
+        }
+        if (booksById.get(isbn) == null) {
+            System.out.println("Book with isbn: " + isbn + " not found!");
+            return;
+        }
+
+        Member member = memberManager.getMember(memberId);
+        booksById.get(isbn).addToWaitlist(member);
     }
 
     public Member getNextFromWaitlist(String isbn) {
-        // TODO
-        return null;
+        if (booksById.get(isbn) == null) {
+            System.out.println("Book with isbn: " + isbn + " not found!");
+            return null;
+        }
+
+        return booksById.get(isbn).getNextInWaitlist();
     }
 
     public boolean hasWaitlist(String isbn) {
-        // TODO
-        return false;
+        return booksById.get(isbn).hasWaitlist();
     }
 }
