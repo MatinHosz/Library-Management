@@ -1,5 +1,6 @@
 package management;
 
+import datastructures.lists.CustomArrayList;
 import library.Book;
 import library.Member;
 import library.Transaction;
@@ -7,10 +8,10 @@ import library.Transaction;
 import java.util.Date;
 
 public class TransactionManager {
-    // TODO: Define a data structure that stores transactions
+    private CustomArrayList<Transaction> transactionList;
 
     public TransactionManager() {
-        // TODO: Initialize your data structure here
+        transactionList = new CustomArrayList<>();
     }
 
     public Transaction addTransaction(String bookTitle, String memberName, String type) {
@@ -22,12 +23,15 @@ public class TransactionManager {
                 type
         );
 
-        // TODO: Add the transaction to your data structure
+        transactionList.add(transaction);
         return transaction;
     }
 
     public Transaction getTransactionByIndex(int index) {
-        // TODO:
-        return null;
+        try {
+            return transactionList.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 }
