@@ -1,30 +1,45 @@
 package management;
 
+import datastructures.maps.CustomHashMap;
 import library.Member;
 import library.Transaction;
 
 public class MemberManager {
-    // TODO: Define a data structure that stores memberIds and their matching member objects
+    CustomHashMap<String, Member> idToMembersMap;
 
     public MemberManager() {
-        // TODO: Initialize your data structure here
+        idToMembersMap = new CustomHashMap<>();
     }
 
     public void addMember(Member member) {
-        // TODO: Add member and their id to your data structure
+        if (member == null)
+            throw new IllegalArgumentException();
+        idToMembersMap.put(member.getMemberId(), member);
     }
 
     public Member getMember(String memberId) {
-        // TODO
-        return null;
+        return idToMembersMap.get(memberId);
     }
 
     public void recordTransaction(String memberId, Transaction transaction) {
-        // TODO
+        if (!idToMembersMap.containsKey(memberId)) {
+            System.out.println("Member with memberID: " + memberId + " not found!");
+            return;
+        }
+        if (transaction == null)
+            throw new IllegalArgumentException();
+
+        Member targerMember = idToMembersMap.get(memberId);
+        targerMember.addTransaction(transaction);
     }
 
     public Transaction getLastTransaction(String memberId) {
-        // TODO
-        return null;
+        if (!idToMembersMap.containsKey(memberId)) {
+            System.out.println("Member with memberID: " + memberId + " not found!");
+            return null;
+        }
+
+        Member targetMember = idToMembersMap.get(memberId);
+        return targetMember.getLastTransaction();
     }
 }
